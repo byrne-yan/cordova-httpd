@@ -90,13 +90,23 @@ public class WebServer extends NanoHTTPD
                         response.addHeader("Last-Modified", connection.getHeaderField("Last-Modified"));
                     if (connection.getHeaderField("Cache-Control") != null)
                         response.addHeader("Cache-Control", connection.getHeaderField("Cache-Control"));
+                    // if (connection.getHeaderField("Origin") != null)
+                    Log.i( LOGTAG, "Access-Control-Allow-Origin: *");
+                    response.addHeader("Access-Control-Allow-Origin", "*");
+
                     return response;
                 } else {
-                    return serveFile( newURI, header, (AndroidFile) customPath, true );
+                    Response response = serveFile( newURI, header, (AndroidFile) customPath, true );
+                    Log.i( LOGTAG, "Access-Control-Allow-Origin: *");
+                    response.addHeader("Access-Control-Allow-Origin", "*");
+                    return response;
                 }
             }
         }
-        return super.serve( uri, method, header, parms, files );
+         Response response = super.serve( uri, method, header, parms, files );
+        Log.i( LOGTAG, "Access-Control-Allow-Origin: *");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+         return response;
     }
     
     public class InputStreamWithOverloadedClose extends InputStream {
